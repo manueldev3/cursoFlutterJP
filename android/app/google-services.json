@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "593258599790",
+    "project_id": "forestal-m4",
+    "storage_bucket": "forestal-m4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593258599790:android:58e0e08dd859bf91099d7f",
+        "android_client_info": {
+          "package_name": "com.example.proyecto_m4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "593258599790-0h98q3pm7eslqlg6vbgo86e1cc4rpueu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXu7aqPXLsYcgvfX8eq064u-hpijPn9XQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "593258599790-0h98q3pm7eslqlg6vbgo86e1cc4rpueu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
