@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_validator/form_validator.dart';
+import 'package:proyecto_m4/controllers/auth_controller.dart';
 import 'package:proyecto_m4/providers/form_provider.dart';
 
 ///Se iniciaria como anonimo 
@@ -19,7 +20,6 @@ class RegisterPage extends ConsumerWidget {
   final TextEditingController _passwordController = TextEditingController(); 
 
   @override
-  // ignore: prefer_expression_function_bodies
   Widget build(BuildContext context, WidgetRef ref) {
     ///hacemos referencia a nuestro hidepasswordProvider
     final bool hidePassword = ref.watch(hidePasswordProvider);
@@ -172,18 +172,27 @@ class RegisterPage extends ConsumerWidget {
                   ),
             
                   FilledButton(
+                    style: FilledButton.styleFrom(
+                      minimumSize: const Size.fromHeight(59),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
                     onPressed: () {
                       if(
                         _formKey.currentState != null && 
                         _formKey.currentState!.validate()
                       ) {
-            
+                        AuthController.signUp(
+                          name: _nameController.text,
+                          email: _emailController.text,
+                          password: _passwordController.text,
+                        );
                       }
                       return;
                     }, 
                     child: const Text('Registrar'),
                   ),
-                  
                 ],
               ),
             ),
