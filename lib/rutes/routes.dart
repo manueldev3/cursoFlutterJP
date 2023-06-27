@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_m4/pages/home_page.dart';
 import 'package:proyecto_m4/pages/login_page.dart';
+import 'package:proyecto_m4/pages/profile_page.dart';
 import 'package:proyecto_m4/pages/register_page.dart';
 import 'package:proyecto_m4/pages/splash_page.dart';
 import 'package:proyecto_m4/providers/auth_provider.dart';
@@ -29,7 +30,7 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>(
         name: SplashPage.routeName,
         ///Definimos la donde navegaremos
         builder: (BuildContext context, GoRouterState state) =>
-         const SplashPage(),
+        const SplashPage(),
       ),
 
       GoRoute(
@@ -43,7 +44,7 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>(
         path: LoginPage.routeLocation,
         name: LoginPage.routeName,
         builder: (BuildContext context, GoRouterState state) => 
-        const LoginPage(),
+        LoginPage(),
       ),
 
       GoRoute(
@@ -51,6 +52,13 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>(
         name: RegisterPage.routeName,
         builder: (BuildContext context, GoRouterState state) => 
         RegisterPage(),
+      ),
+
+      GoRoute(
+        path: ProfilePage.routeLocation,
+        name: ProfilePage.routeName,
+        builder: (BuildContext context, GoRouterState state) =>
+            const ProfilePage(),
       ),
     ],
     redirect: (BuildContext context, GoRouterState state) {
@@ -66,7 +74,7 @@ final Provider<GoRouter> routerProvider = Provider<GoRouter>(
       ///Tiene el enfoque WEB
       final bool isSplash = state.location == SplashPage.routeLocation;
       if (isSplash) {
-        return isAuth ? HomePage.routeLocation : RegisterPage.routeLocation;
+        return isAuth ? HomePage.routeLocation : LoginPage.routeLocation;
       }
 
       final bool isLoggingIn = state.location == LoginPage.routeLocation;

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:proyecto_m4/model/user_model.dart';
-import 'package:proyecto_m4/providers/auth_provider.dart';
+import 'package:proyecto_m4/pages/profile_page.dart';
 import 'package:proyecto_m4/providers/user_provider.dart';
 
 ///Definicion del pagina inicio
@@ -32,7 +32,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       );
       final UserModel? userDocument = ref.watch(userNotifierProvider);
       if (userDocument == null) {
-        // context.replace('/profile');
+        context.pushReplacement(ProfilePage.routeLocation);
       }
     });
   }

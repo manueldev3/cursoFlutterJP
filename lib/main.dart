@@ -29,6 +29,7 @@ class MainApp extends ConsumerWidget {
       routeInformationProvider: router.routeInformationProvider,
       title: 'Sistema Gestion Cargio M4',
       theme: ThemeData(
+        useMaterial3: true,
         primarySwatch: Colors.blue,
       ),
     );
