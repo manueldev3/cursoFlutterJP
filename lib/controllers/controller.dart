@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// Controller abstract
-mixin Controller<T, K> {
+abstract class Controller<T> {
   /// Get all
   Future<List<T>> getAll();
   /// Create
-  Future<K> create(T data);
+  Future<T?> create(T data) async => null;
   /// Update
-  Future<void> update(T data);
+  Future<void> update(T data) async {}
   /// Delete
-  Future<void> delete(DocumentReference<Object?> reference);
+  Future<void> delete(DocumentReference<Object?> reference) async {}
 }

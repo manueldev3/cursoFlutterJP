@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_validator/form_validator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:proyecto_m4/controllers/auth_controller.dart';
+import 'package:proyecto_m4/pages/login_page.dart';
 import 'package:proyecto_m4/providers/form_provider.dart';
 
 ///Se iniciaria como anonimo 
@@ -22,6 +25,8 @@ class RegisterPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ///hacemos referencia a nuestro hidepasswordProvider
     final bool hidePassword = ref.watch(hidePasswordProvider);
+    /// Loading button
+    final bool loadingButton = ref.watch(loadingButtonProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Registro de usuario'),
@@ -37,13 +42,13 @@ class RegisterPage extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children:<Widget> [
-                  
+
                   const FlutterLogo(size: 150),
-            
+
                   const SizedBox(
                     height: 20,
                   ),
-            
+
                   ///NOMBRE
                   TextFormField(
                     controller: _nameController,
@@ -57,7 +62,7 @@ class RegisterPage extends ConsumerWidget {
                       labelText: 'Nombre',
                       prefixIcon: const Icon(Icons.person_outline_sharp),
                     ),
-            
+
                     validator: (String? value) {
                       if(value != null && value.isEmpty) {
                         return 'El nombre es requerido';
@@ -65,15 +70,15 @@ class RegisterPage extends ConsumerWidget {
                       return null;
                     },
                   ),
-            
+
                   const SizedBox(
                     height: 16,
                   ),
-            
+
                   ///CORREO
                   TextFormField(
                     controller: _emailController,
-            
+
                     decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -84,19 +89,19 @@ class RegisterPage extends ConsumerWidget {
                       labelText: 'Correo',
                       prefixIcon: const Icon(Icons.email_outlined),
                     ),
-            
+
                     validator: ValidationBuilder().email().build(),
                     keyboardType: TextInputType.emailAddress,
                   ),
-            
+
                   const SizedBox(
                     height: 16,
                   ),
-            
-                  ///CONTRASEÑA 
+
+                  ///CONTRASEÑA
                   TextFormField(
                     controller: _passwordController,
-            
+
                     decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -119,15 +124,15 @@ class RegisterPage extends ConsumerWidget {
                         ),
                       ),
                     ),
-            
+
                     obscureText: hidePassword,
                     validator: ValidationBuilder().minLength(6).build(),
                   ),
-            
+
                   const SizedBox(
                     height: 16,
                   ),
-            
+
                   ///VERIFICACION CONTRASEÑA
                   TextFormField(
                     decoration: InputDecoration(
@@ -152,7 +157,7 @@ class RegisterPage extends ConsumerWidget {
                         ),
                       ),
                     ),
-            
+
                     obscureText: hidePassword,
                     validator: (String? value) {
                       if (value != null && value.isEmpty) {
@@ -165,11 +170,11 @@ class RegisterPage extends ConsumerWidget {
                       return null;
                     },
                   ),
-            
+
                   const SizedBox(
                     height: 16,
                   ),
-            
+
                   FilledButton(
                     style: FilledButton.styleFrom(
                       minimumSize: const Size.fromHeight(59),
@@ -177,25 +182,64 @@ class RegisterPage extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      ref.read(hidePasswordProvider.notifier).state = true;
                       if(
-                        _formKey.currentState != null && 
+                        _formKey.currentState != null &&
                         _formKey.currentState!.validate()
                       ) {
-                        AuthController.signUp(
-                          name: _nameController.text,
-                          email: _emailController.text,
-                          password: _passwordController.text,
-                        );
+                        try {
+                          ref.read(loadingButtonProvider.notifier)
+                              .state = true;
+                          await AuthController.signUp(
+                            name: _nameController.text,
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          );
+                          ref.read(loadingButtonProvider.notifier)
+                              .state = false;
+                        } on FirebaseAuthException catch (exception) {
+                          ref.read(loadingButtonProvider.notifier)
+                              .state = false;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(exception.message.toString()),
+                              showCloseIcon: true,
+                            ),
+                          );
+                        }
                       }
                       return;
-                    }, 
-                    child: const Text('Registrar'),
+                    },
+                    child: loadingButton ?
+                      const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      ) :
+                      const Text('Registrar'),
                   ),
                 ],
               ),
             ),
           ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        width: MediaQuery.of(context).size.width,
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          alignment: WrapAlignment.center,
+          children: <Widget>[
+            const Text(
+              '¿Ya tienes cuenta?',
+            ),
+            TextButton(
+              onPressed: () => context.go(LoginPage.routeLocation),
+              child: const Text('Acceder'),
+            ),
+          ],
         ),
       ),
     );

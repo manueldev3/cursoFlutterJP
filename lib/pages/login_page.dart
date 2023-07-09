@@ -1,8 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_validator/form_validator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:proyecto_m4/controllers/auth_controller.dart';
+import 'package:proyecto_m4/pages/register_page.dart';
 import 'package:proyecto_m4/providers/form_provider.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 
@@ -134,6 +135,23 @@ class LoginPage extends ConsumerWidget {
               ],
             ),
           ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        width: MediaQuery.of(context).size.width,
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          alignment: WrapAlignment.center,
+          children: <Widget>[
+            const Text(
+              '¿Aún no tienes cuenta?',
+            ),
+            TextButton(
+              onPressed: () => context.go(RegisterPage.routeLocation),
+              child: const Text('Registrarse'),
+            ),
+          ],
         ),
       ),
     );
